@@ -48,7 +48,7 @@ public class ExcelHelper {
 			} else {
 				throw new RuntimeException("invalid file name or extension");
 			}
-			book.getSheet(sheetName);
+			sheet = book.getSheet(sheetName);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -71,17 +71,24 @@ public class ExcelHelper {
 	public String readData(int rnum, int cnum) {
 		String data = "";
 		Cell cell = sheet.getRow(rnum).getCell(cnum);
-		CellType cellType = cell.getCellType();
-		switch (cellType) {
-		case STRING:
-			data = cell.getStringCellValue();
-			break;
-		case NUMERIC:
+		try {
+			CellType cellType = cell.getCellType();
+			switch (cellType) {
+			case STRING:
+				data = cell.getStringCellValue();
+				break;
+			case NUMERIC:
 //			int i = (int) cell.getNumericCellValue();
 //			data = Integer.toString(i);
-			data = Integer.toString((int) cell.getNumericCellValue());
-		default:
-			data = "";
+				data = Integer.toString((int) cell.getNumericCellValue());
+			case BLANK:
+				data = "";
+				break;
+			default:
+				data = "";
+			}
+		} catch (Exception e) {
+			
 		}
 		return data;
 	}
